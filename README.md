@@ -6,7 +6,9 @@
 [![Check & fix styling](https://github.com/spatie/laravel-discord-alerts/actions/workflows/php-cs-fixer.yml/badge.svg)](https://github.com/spatie/laravel-discord-alerts/actions/workflows/php-cs-fixer.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/spatie/laravel-discord-alerts.svg?style=flat-square)](https://packagist.org/packages/spatie/laravel-discord-alerts)
 
-This package can quickly send alerts to Discord. You can use this to notify yourself of any noteworthy events happening in your app.
+This package can quickly send alerts to Discord. You can use this to notify yourself of any noteworthy events happening in your app. 
+
+Want to quickly send alerts to Slack? Then check out [laravel-slack-alerts](https://github.com/spatie/laravel-slack-alerts).
 
 ```php
 use Spatie\DiscordAlerts\Facades\DiscordAlert;
