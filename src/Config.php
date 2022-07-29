@@ -25,7 +25,7 @@ class Config
         if (filter_var($name, FILTER_VALIDATE_URL)) {
             return $name;
         }
-        
+
         $url = config("discord-alerts.webhook_urls.{$name}");
 
         if (is_null($url)) {
