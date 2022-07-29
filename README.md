@@ -95,6 +95,16 @@ use Spatie\DiscordAlerts\Facades\DiscordAlert;
 DiscordAlert::to('marketing')->message("You have a new subscriber to the {$newsletter->name} newsletter!");
 ```
 
+### Using a custom webhooks
+
+The `to` function also supports custom webhook urls.
+
+```php
+use Spatie\DiscordAlerts\Facades\DiscordAlert;
+
+DiscordAlert::to('https://custom-url.com')->message("You have a new subscriber to the {$newsletter->name} newsletter!");
+```
+
 ## Formatting
 
 ### Markdown
