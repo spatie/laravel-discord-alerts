@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-discord-alerts` will be documented in this file.
 
+## 1.2.1 - 2022-11-07
+
+### What's Changed
+
+- Bump dependabot/fetch-metadata from 1.3.3 to 1.3.4 by @dependabot in https://github.com/spatie/laravel-discord-alerts/pull/12
+- feat: format newline on `message` function by @localhousee in https://github.com/spatie/laravel-discord-alerts/pull/17
+
+### New Contributors
+
+- @localhousee made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/17
+
+**Full Changelog**: https://github.com/spatie/laravel-discord-alerts/compare/1.2.0...1.2.1
+
 ## 1.2.0 - 2022-07-29
 
 ### What's Changed
