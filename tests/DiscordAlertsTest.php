@@ -53,3 +53,13 @@ it('will throw an exception for a missing job class', function () {
 
     DiscordAlert::message('test-data');
 })->throws(JobClassDoesNotExist::class);
+
+it('will convert a newline string (\n) into a PHP_EOL constant', function() {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::message('test \n data');
+
+    Bus::assertDispatched(function (SendToDiscordChannelJob $job) {
+        return $job->text === "test " . PHP_EOL . " data";
+    });
+});
