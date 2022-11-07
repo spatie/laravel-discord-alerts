@@ -17,6 +17,8 @@ class DiscordAlert
     {
         $webhookUrl = Config::getWebhookUrl($this->webhookUrlName);
 
+        $text = $this->parseNewline($text);
+
         $jobArguments = [
             'text' => $text,
             'webhookUrl' => $webhookUrl,
@@ -25,5 +27,10 @@ class DiscordAlert
         $job = Config::getJob($jobArguments);
 
         dispatch($job);
+    }
+
+    private function parseNewline(string $text): string
+    {
+        return str_replace('\n', PHP_EOL, $text);
     }
 }
