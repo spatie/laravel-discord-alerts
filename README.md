@@ -108,7 +108,7 @@ DiscordAlert::to('https://custom-url.com')->message("You have a new subscriber t
 ## Formatting
 
 ### Markdown
-You can format your messages with markup. Learn how [in the Discord API docs](https://discord.com/help/articles/202288908-Format-your-messages).
+You can format your messages with markup. Learn how [in the Discord API docs](https://support.discord.com/hc/en-us/articles/210298617-Markdown-Text-101-Chat-Formatting-Bold-Italic-Underline-).
 
 ```php
 use Spatie\DiscordAlerts\Facades\DiscordAlert;
