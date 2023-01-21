@@ -37,7 +37,7 @@ You can install the package via composer:
 composer require spatie/laravel-discord-alerts
 ```
 
-You can set a `DISCORD_ALERT_WEBHOOK` env variable containing a valid Discord webhook URL. You can learn how to get a webhook URL [in the Discord API docs](https://api.discord.com/messaging/webhooks).
+You can set a `DISCORD_ALERT_WEBHOOK` env variable containing a valid Discord webhook URL. You can learn how to get a webhook URL [in the Discord API docs](https://discord.com/developers/docs/resources/webhook).
 
 
 Alternatively, you can publish the config file with:
