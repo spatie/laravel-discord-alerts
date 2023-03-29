@@ -2,6 +2,25 @@
 
 All notable changes to `laravel-discord-alerts` will be documented in this file.
 
+## 1.2.2 - 2023-03-29
+
+### What's Changed
+
+- Bump dependabot/fetch-metadata from 1.3.4 to 1.3.5 by @dependabot in https://github.com/spatie/laravel-discord-alerts/pull/18
+- update external markdown formatting URL by @Jamesclark32 in https://github.com/spatie/laravel-discord-alerts/pull/20
+- Updated Discord's webhook guide URL. by @clydesantiago in https://github.com/spatie/laravel-discord-alerts/pull/22
+- Bump dependabot/fetch-metadata from 1.3.5 to 1.3.6 by @dependabot in https://github.com/spatie/laravel-discord-alerts/pull/23
+- Bump ramsey/composer-install from 1 to 2 by @dependabot in https://github.com/spatie/laravel-discord-alerts/pull/19
+- Add support for Laravel 10 by @Nielsvanpach in https://github.com/spatie/laravel-discord-alerts/pull/24
+
+### New Contributors
+
+- @Jamesclark32 made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/20
+- @clydesantiago made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/22
+- @Nielsvanpach made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/24
+
+**Full Changelog**: https://github.com/spatie/laravel-discord-alerts/compare/1.2.1...1.2.2
+
 ## 1.2.1 - 2022-11-07
 
 ### What's Changed
