@@ -23,7 +23,8 @@ class SendToDiscordChannelJob implements ShouldQueue
 
     public function __construct(
         public string $text,
-        public string $webhookUrl
+        public string $webhookUrl,
+        public array|null $embeds = null
     ) {
     }
 
@@ -32,6 +33,10 @@ class SendToDiscordChannelJob implements ShouldQueue
         $payload = [
             'content' => $this->text,
         ];
+
+        if (!blank($this->embeds)) {
+            $payload['embeds'] = $this->embeds;
+        }
 
         Http::post($this->webhookUrl, $payload);
     }

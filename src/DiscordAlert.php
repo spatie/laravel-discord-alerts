@@ -13,15 +13,22 @@ class DiscordAlert
         return $this;
     }
 
-    public function message(string $text): void
+    public function message(string $text, array $embeds = []): void
     {
         $webhookUrl = Config::getWebhookUrl($this->webhookUrlName);
 
         $text = $this->parseNewline($text);
 
+        foreach ($embeds as $key => $embed) {
+            if (array_key_exists('color', $embed)) {
+                $embeds[$key]['color'] = hexdec(str_replace('#', '', $embed['color'])) ;
+            }
+        }
+
         $jobArguments = [
             'text' => $text,
             'webhookUrl' => $webhookUrl,
+            'embeds' => $embeds
         ];
 
         $job = Config::getJob($jobArguments);
