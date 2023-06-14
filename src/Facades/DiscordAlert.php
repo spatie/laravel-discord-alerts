@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static self to(string $text)
- * @method static void message(string $text)
+ * @method static void message(string $text, array $embeds = null)
  *
  * @see \Spatie\DiscordAlerts\DiscordAlert
  */
