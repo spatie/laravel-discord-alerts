@@ -28,7 +28,7 @@ class DiscordAlert
         $jobArguments = [
             'text' => $text,
             'webhookUrl' => $webhookUrl,
-            'embeds' => $embeds
+            'embeds' => $embeds,
         ];
 
         $job = Config::getJob($jobArguments);

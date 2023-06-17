@@ -70,8 +70,8 @@ it('will send a message as well as a embed in just one message', function () {
     DiscordAlert::message('test \n data', [
         [
             'title' => 'Test Embed',
-            'description' => 'This is a test embed.'
-        ]
+            'description' => 'This is a test embed.',
+        ],
     ]);
 
     Bus::assertDispatched(function (SendToDiscordChannelJob $job) {

@@ -34,7 +34,7 @@ class SendToDiscordChannelJob implements ShouldQueue
             'content' => $this->text,
         ];
 
-        if (!blank($this->embeds)) {
+        if (! blank($this->embeds)) {
             $payload['embeds'] = $this->embeds;
         }
 
