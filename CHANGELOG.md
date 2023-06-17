@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-discord-alerts` will be documented in this file.
 
+## 1.3.0 - 2023-06-17
+
+### What's Changed
+
+- Bump dependabot/fetch-metadata from 1.3.6 to 1.4.0 by @dependabot in https://github.com/spatie/laravel-discord-alerts/pull/25
+- Bump dependabot/fetch-metadata from 1.4.0 to 1.5.1 by @dependabot in https://github.com/spatie/laravel-discord-alerts/pull/26
+- Feature: Added Functionality for sending embeds by @oakyydev in https://github.com/spatie/laravel-discord-alerts/pull/30
+
+### New Contributors
+
+- @oakyydev made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/30
+
+**Full Changelog**: https://github.com/spatie/laravel-discord-alerts/compare/1.2.2...1.3.0
+
 ## 1.2.2 - 2023-03-29
 
 ### What's Changed
