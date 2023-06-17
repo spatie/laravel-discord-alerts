@@ -64,12 +64,14 @@ it('will convert a newline string (\n) into a PHP_EOL constant', function () {
     });
 });
 
-it('will send a message as well as a embed in just one message', function() {
+it('will send a message as well as a embed in just one message', function () {
     config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
 
     DiscordAlert::message('test \n data', [
-        'title' => 'Test Embed',
-        'description' => 'This is a test embed.'
+        [
+            'title' => 'Test Embed',
+            'description' => 'This is a test embed.'
+        ]
     ]);
 
     Bus::assertDispatched(function (SendToDiscordChannelJob $job) {
