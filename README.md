@@ -71,6 +71,26 @@ To send a message to Discord, simply call `DiscordAlert::message()` and pass it 
 DiscordAlert::message("You have a new subscriber to the {$newsletter->name} newsletter!");
 ```
 
+## Sending an embed
+
+To send an embed you can call the same function as above. Just add the embed as a second array as following:
+
+```php
+DiscordAlert::message("You have a new subscriber to the {$newsletter->name} newsletter!", [
+    [
+        'title' => 'My title',
+        'description' => 'My description',
+        'color' => '#E77625',
+        'author' => [
+            'name' => 'Spatie',
+            'url' => 'https://spatie.be/'
+        ]    
+    ]
+]);
+```
+
+You can also send multiple embeds as one message. Just be careful that you don't hit the limit of Discord.
+
 ## Using multiple webhooks
 
 You can also use an alternative webhook, by specify extra ones in the config file.
