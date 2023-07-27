@@ -64,6 +64,21 @@ it('will convert a newline string (\n) into a PHP_EOL constant', function () {
     });
 });
 
+it('will convert a newline string (\n) into a PHP_EOL constant in embeds as well', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::message('test \n data', [
+        [
+            'title' => 'Test Embed',
+            'description' => 'This is a test embed.\nI should be on a new line.',
+        ],
+    ]);
+
+    Bus::assertDispatched(function (SendToDiscordChannelJob $job) {
+        return $job->embeds[0]['description'] === "This is a test embed." . PHP_EOL . "I should be on a new line.";
+    });
+});
+
 it('will send a message as well as a embed in just one message', function () {
     config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
 
