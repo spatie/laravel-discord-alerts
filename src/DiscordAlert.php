@@ -23,7 +23,7 @@ class DiscordAlert
             if (array_key_exists('description', $embed)) {
                 $embeds[$key]['description'] = $this->parseNewline($embeds[$key]['description']);
             }
-            
+
             if (array_key_exists('color', $embed)) {
                 $embeds[$key]['color'] = hexdec(str_replace('#', '', $embed['color'])) ;
             }
