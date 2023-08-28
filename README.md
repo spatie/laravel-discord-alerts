@@ -130,7 +130,7 @@ You can format your messages with markup. Learn how [in the Discord API docs](ht
 ```php
 use Spatie\DiscordAlerts\Facades\DiscordAlert;
 
-DiscordAlert::message("A message *with some bold statements* and _some italicized text_.");
+DiscordAlert::message("A message **with some bold statements** and _some italicized text_.");
 ```
 
 ### Emoji's
