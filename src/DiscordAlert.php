@@ -5,10 +5,26 @@ namespace Spatie\DiscordAlerts;
 class DiscordAlert
 {
     protected string $webhookUrlName = 'default';
+    protected $username = null;
+    protected $avatarUrl = null;
 
     public function to(string $webhookUrlName): self
     {
         $this->webhookUrlName = $webhookUrlName;
+
+        return $this;
+    }
+
+    public function username(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function avatar(string $avatarUrl): self
+    {
+        $this->avatarUrl = $avatarUrl;
 
         return $this;
     }
@@ -34,6 +50,9 @@ class DiscordAlert
             'webhookUrl' => $webhookUrl,
             'embeds' => $embeds,
         ];
+
+        if($this->username != null) { $jobArguments['username'] = $this->username; }
+        if($this->avatarUrl != null) { $jobArguments['avatarUrl'] = $this->avatarUrl; }
 
         $job = Config::getJob($jobArguments);
 
