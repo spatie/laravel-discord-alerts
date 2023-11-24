@@ -24,15 +24,20 @@ class SendToDiscordChannelJob implements ShouldQueue
     public function __construct(
         public string $text,
         public string $webhookUrl,
-        public array|null $embeds = null
+        public array|null $embeds = null,
+        public string|null $username = null,
+        public string|null $avatarUrl = null
     ) {
     }
 
     public function handle(): void
     {
         $payload = [
-            'content' => $this->text,
+            'content' => $this->text
         ];
+
+        if($this->username != null) { $payload['username'] = $this->username; }
+        if($this->avatarUrl != null) { $payload['avatar_url'] = $this->avatarUrl; }
 
         if (! blank($this->embeds)) {
             $payload['embeds'] = $this->embeds;
