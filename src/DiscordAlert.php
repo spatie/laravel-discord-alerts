@@ -37,7 +37,7 @@ class DiscordAlert
 
         $job = Config::getJob($jobArguments);
 
-        dispatch($job);
+        dispatch($job)->onConnection(Config::getConnection());
     }
 
     private function parseNewline(string $text): string

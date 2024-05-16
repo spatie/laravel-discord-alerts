@@ -59,6 +59,11 @@ return [
      * job to set timeouts, retries, etc...
      */
     'job' => Spatie\DiscordAlerts\Jobs\SendToDiscordChannelJob::class,
+
+    /*
+     * It is possible to specify the queue connection that should be used to send the alert.
+     */
+    'queue_connection' => 'redis',
 ];
 
 ```
