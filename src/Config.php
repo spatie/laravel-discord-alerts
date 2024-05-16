@@ -38,4 +38,13 @@ class Config
 
         return $url;
     }
+
+    public static function getConnection(): string
+    {
+        $connection = config("discord-alerts.connection");
+        if(is_null($connection)) {
+            $connection = config("queue.default");
+        }
+        return $connection;
+    }
 }
