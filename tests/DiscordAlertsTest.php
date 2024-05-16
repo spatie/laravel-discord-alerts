@@ -18,6 +18,17 @@ it('can dispatch a job to send a message to discord using the default webhook ur
     Bus::assertDispatched(SendToDiscordChannelJob::class);
 });
 
+it('can dispatch a job to send a message to discord using the default webhook url and a custom queue', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+    config()->set('discord-alerts.queue_connection', 'custom-queue-connection');
+
+    DiscordAlert::message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->connection === 'custom-queue-connection';
+    });
+});
+
 it('can dispatch a job to send a message to discord using an alternative webhook url', function () {
     config()->set('discord-alerts.webhook_urls.marketing', 'https://test-domain.com');
 
