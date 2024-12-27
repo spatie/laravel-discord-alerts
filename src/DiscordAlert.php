@@ -6,9 +6,23 @@ class DiscordAlert
 {
     protected string $webhookUrlName = 'default';
 
+    protected int $delay = 0; // minutes
+
     public function to(string $webhookUrlName): self
     {
         $this->webhookUrlName = $webhookUrlName;
+
+        return $this;
+    }
+
+    public function delayMinutes(int $minutes = 0){
+        $this->delay = $minutes;
+
+        return $this;
+    }
+
+    public function delayHours(int $hours = 0){
+        $this->delay = $hours * 60;
 
         return $this;
     }
@@ -37,7 +51,7 @@ class DiscordAlert
 
         $job = Config::getJob($jobArguments);
 
-        dispatch($job)->onConnection(Config::getConnection());
+        dispatch($job)->delay(now()->addMinutes($this->delay))->onConnection(Config::getConnection());
     }
 
     private function parseNewline(string $text): string
