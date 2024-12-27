@@ -127,6 +127,19 @@ use Spatie\DiscordAlerts\Facades\DiscordAlert;
 DiscordAlert::to('https://custom-url.com')->message("You have a new subscriber to the {$newsletter->name} newsletter!");
 ```
 
+### Using the delay feature
+
+The `delayMinutes` of the `delayHours` function can be used to delay the message to Discord and can be used in parallel.
+
+```php
+use Spatie\DiscordAlerts\Facades\DiscordAlert;
+
+DiscordAlert::to('https://custom-url.com')->delayMinutes(5)->message("You have a new subscriber to the {$newsletter->name} newsletter!");
+DiscordAlert::to('https://custom-url.com')->delayHours(1)->message("You have a new subscriber to the {$newsletter->name} newsletter!");
+
+DiscordAlert::to('https://custom-url.com')->delayHours(1)->delayMinutes(10)->message("You have a new subscriber to the {$newsletter->name} newsletter!");
+```
+
 ## Formatting
 
 ### Markdown
