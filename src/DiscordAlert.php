@@ -11,6 +11,7 @@ class DiscordAlert
     public function to(string $webhookUrlName): self
     {
         $this->webhookUrlName = $webhookUrlName;
+        $this->delay = 0;
 
         return $this;
     }
