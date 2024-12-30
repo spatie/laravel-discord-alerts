@@ -16,14 +16,16 @@ class DiscordAlert
         return $this;
     }
 
-    public function delayMinutes(int $minutes = 0){
-        $this->delay+= $minutes;
+    public function delayMinutes(int $minutes = 0)
+    {
+        $this->delay += $minutes;
 
         return $this;
     }
 
-    public function delayHours(int $hours = 0){
-        $this->delay+= $hours * 60;
+    public function delayHours(int $hours = 0)
+    {
+        $this->delay += $hours * 60;
 
         return $this;
     }

@@ -43,7 +43,7 @@ class Config
     {
         $connection = config("discord-alerts.queue_connection");
 
-        if(is_null($connection)) {
+        if (is_null($connection)) {
             $connection = config("queue.default");
         }
 
