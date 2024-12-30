@@ -104,3 +104,33 @@ it('will send a message as well as a embed in just one message', function () {
         return $job->text === "test " . PHP_EOL . " data" && count($job->embeds);
     });
 });
+
+it('can delay a message by minutes', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::delayMinutes(10)->message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->delay === 10;
+    });
+});
+
+it('can delay a message by hours', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::delayHours(1)->message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->delay === 60;
+    });
+});
+
+it('can delay a message by hours and minutes', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::delayHours(1)->delayMinutes(10)->message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->delay === 70;
+    });
+});
