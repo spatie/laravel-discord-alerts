@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-discord-alerts` will be documented in this file.
 
+## 1.6.0 - 2024-12-30
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.1.0 to 2.2.0 by @dependabot in https://github.com/spatie/laravel-discord-alerts/pull/48
+* Add functions to delay the job that delivers the message by @igoptx in https://github.com/spatie/laravel-discord-alerts/pull/50
+
+### New Contributors
+
+* @igoptx made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/50
+
+**Full Changelog**: https://github.com/spatie/laravel-discord-alerts/compare/1.5.0...1.6.0
+
 ## 1.5.0 - 2024-05-16
 
 ### What's Changed
