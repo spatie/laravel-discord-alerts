@@ -134,3 +134,85 @@ it('can delay a message by hours and minutes', function () {
         return $job->delay === 70;
     });
 });
+
+it('includes username when specified', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::withUsername('CronBot')->message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->username === 'CronBot';
+    });
+});
+
+it('does not include username when not set', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->username === null;
+    });
+});
+
+it('throws an exception for an invalid username', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::withUsername('<script>alert(1)</script>')->message('test-data');
+})->throws(InvalidArgumentException::class);
+
+it('includes avatar_url when a valid one is set', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+    config()->set('discord-alerts.avatar_urls.custom', 'https://example.com/avatar.png');
+
+    DiscordAlert::withAvatar('custom')->message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->avatar_url === 'https://example.com/avatar.png';
+    });
+});
+
+it('does not include avatar_url when default is empty', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+    config()->set('discord-alerts.avatar_urls.default', '');
+
+    DiscordAlert::message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->avatar_url === null;
+    });
+});
+
+it('throws an exception for an invalid avatar URL', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+    config()->set('discord-alerts.avatar_urls.malicious', 'invalid-url');
+
+    DiscordAlert::withAvatar('malicious')->message('test-data');
+})->throws(InvalidArgumentException::class);
+
+it('throws an exception if avatar URL is not HTTPS', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+    config()->set('discord-alerts.avatar_urls.insecure', 'http://example.com/avatar.png');
+
+    DiscordAlert::withAvatar('insecure')->message('test-data');
+})->throws(InvalidArgumentException::class);
+
+it('does not include tts when not explicitly set', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->tts === false;
+    });
+});
+
+it('includes tts when explicitly set to true', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::enableTTS(true)->message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->tts === true;
+    });
+});
