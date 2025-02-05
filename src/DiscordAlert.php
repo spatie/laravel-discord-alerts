@@ -82,6 +82,11 @@ class DiscordAlert
 
         if (!empty($this->avatarUrl)) {
             $jobArguments['avatar_url'] = $this->avatarUrl;
+        } else {
+            $defaultAvatar = Config::getAvatarUrl('default');
+            if (!empty($defaultAvatar)) {
+                $jobArguments['avatar_url'] = $defaultAvatar;
+            }
         }
 
         $job = Config::getJob($jobArguments);
