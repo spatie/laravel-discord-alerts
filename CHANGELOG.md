@@ -2,6 +2,19 @@
 
 All notable changes to `laravel-discord-alerts` will be documented in this file.
 
+## 1.6.1 - 2025-02-06
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.2.0 to 2.3.0 by @dependabot in https://github.com/spatie/laravel-discord-alerts/pull/51
+* Username, avatar, tts webhook functionality. by @brunomers11 in https://github.com/spatie/laravel-discord-alerts/pull/53
+
+### New Contributors
+
+* @brunomers11 made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/53
+
+**Full Changelog**: https://github.com/spatie/laravel-discord-alerts/compare/1.6.0...1.6.1
+
 ## 1.6.0 - 2024-12-30
 
 ### What's Changed
