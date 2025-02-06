@@ -39,11 +39,33 @@ class Config
         return $url;
     }
 
+    public static function getAvatarUrl(string $name): ?string
+    {
+        $url = config("discord-alerts.avatar_urls.{$name}", '');
+    
+        // If the URL is empty, return null (no avatar included in payload)
+        if ($url === '') {
+            return null;
+        }
+    
+        // Validate that it is a proper URL
+        if (!filter_var($url, FILTER_VALIDATE_URL)) {
+            throw new \InvalidArgumentException("Invalid avatar URL: {$url}");
+        }
+    
+        // Optional: Enforce HTTPS only
+        if (!preg_match('/^https:\/\//', $url)) {
+            throw new \InvalidArgumentException("Invalid avatar URL: {$url}. Must use HTTPS.");
+        }
+    
+        return $url;
+    }    
+
     public static function getConnection(): string
     {
         $connection = config("discord-alerts.queue_connection");
 
-        if (is_null($connection)) {
+        if(is_null($connection)) {
             $connection = config("queue.default");
         }
 

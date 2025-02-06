@@ -55,6 +55,14 @@ return [
     ],
 
     /*
+     * Default avatar is an empty string '' which means it will not be included in the payload.
+     * You can add multiple custom avatars and then specify directly with withAvatar()
+     */
+    'avatar_urls' => [
+        'default' => '',
+    ],
+
+    /*
      * This job will send the message to Discord. You can extend this
      * job to set timeouts, retries, etc...
      */
@@ -95,6 +103,15 @@ DiscordAlert::message("You have a new subscriber to the {$newsletter->name} news
 ```
 
 You can also send multiple embeds as one message. Just be careful that you don't hit the limit of Discord.
+
+## Changing webhook username/avatar/tts
+
+Add/change the functions before invoking the message. `DiscordAlert::message()`
+tts is false by default. You can add multiple custom avatars in the config file (same as multiple webhooks).
+
+```php
+DiscordAlert::withUsername('Test')->enableTTS('true')->withAvatar('custom')->message("You have a new subscriber to the {$newsletter->name} newsletter!");
+```
 
 ## Using multiple webhooks
 

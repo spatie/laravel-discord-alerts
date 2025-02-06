@@ -24,6 +24,9 @@ class SendToDiscordChannelJob implements ShouldQueue
     public function __construct(
         public string $text,
         public string $webhookUrl,
+        public ?string $username = null,
+        public bool $tts = false,
+        public ?string $avatar_url = null,
         public array|null $embeds = null
     ) {
     }
@@ -32,9 +35,18 @@ class SendToDiscordChannelJob implements ShouldQueue
     {
         $payload = [
             'content' => $this->text,
+            'tts' => $this->tts,
         ];
 
-        if (! blank($this->embeds)) {
+        if (!empty($this->username)) {
+            $payload['username'] = $this->username;
+        }
+
+        if (!empty($this->avatar_url)) {
+            $payload['avatar_url'] = $this->avatar_url;
+        }
+
+        if (!empty($this->embeds)) {
             $payload['embeds'] = $this->embeds;
         }
 
