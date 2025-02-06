@@ -38,15 +38,15 @@ class SendToDiscordChannelJob implements ShouldQueue
             'tts' => $this->tts,
         ];
 
-        if (!empty($this->username)) {
+        if (! empty($this->username)) {
             $payload['username'] = $this->username;
         }
 
-        if (!empty($this->avatar_url)) {
+        if (! empty($this->avatar_url)) {
             $payload['avatar_url'] = $this->avatar_url;
         }
 
-        if (!empty($this->embeds)) {
+        if (! empty($this->embeds)) {
             $payload['embeds'] = $this->embeds;
         }
 
