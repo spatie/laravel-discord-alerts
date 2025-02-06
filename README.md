@@ -76,8 +76,6 @@ return [
 
 ```
 
-**NOTE**: You have to publish the config if you want to add or edit the avatar.
-
 ## Usage
 
 To send a message to Discord, simply call `DiscordAlert::message()` and pass it any message you want.
