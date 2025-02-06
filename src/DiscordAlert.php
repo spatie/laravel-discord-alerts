@@ -2,6 +2,8 @@
 
 namespace Spatie\DiscordAlerts;
 
+use Spatie\DiscordAlerts\Exceptions\UsernameNotValid;
+
 class DiscordAlert
 {
     protected string $webhookUrlName = 'default';
@@ -34,9 +36,8 @@ class DiscordAlert
 
     public function withUsername(string $username): self
     {
-        // Validate username: Allow letters, numbers, spaces, underscores, and dashes
         if (! preg_match('/^[a-zA-Z0-9 _-]{1,32}$/', $username)) {
-            throw new \InvalidArgumentException("Invalid username. Allowed: letters, numbers, spaces, underscores, dashes (max 32 chars).");
+            throw UsernameNotValid::make($username);
         }
 
         $this->username = $username;
@@ -44,7 +45,7 @@ class DiscordAlert
         return $this;
     }
 
-    public function enableTTS(bool $enabled = false): self
+    public function enableTts(bool $enabled = false): self
     {
         $this->tts = $enabled;
 
@@ -85,13 +86,10 @@ class DiscordAlert
             $jobArguments['username'] = $this->username;
         }
 
-        if (! empty($this->avatarUrl)) {
-            $jobArguments['avatar_url'] = $this->avatarUrl;
-        } else {
-            $defaultAvatar = Config::getAvatarUrl('default');
-            if (! empty($defaultAvatar)) {
-                $jobArguments['avatar_url'] = $defaultAvatar;
-            }
+        $avatarUrl = $this->avatarUrl ?? Config::getAvatarUrl('default');
+
+        if ($avatarUrl) {
+            $jobArguments['avatar_url'] = $avatarUrl;
         }
 
         $job = Config::getJob($jobArguments);

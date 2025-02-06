@@ -2,6 +2,7 @@
 
 namespace Spatie\DiscordAlerts;
 
+use Spatie\DiscordAlerts\Exceptions\AvatarUrlNotValid;
 use Spatie\DiscordAlerts\Exceptions\JobClassDoesNotExist;
 use Spatie\DiscordAlerts\Exceptions\WebhookDoesNotExist;
 use Spatie\DiscordAlerts\Exceptions\WebhookUrlNotValid;
@@ -43,19 +44,16 @@ class Config
     {
         $url = config("discord-alerts.avatar_urls.{$name}", '');
 
-        // If the URL is empty, return null (no avatar included in payload)
         if ($url === '') {
             return null;
         }
 
-        // Validate that it is a proper URL
-        if (! filter_var($url, FILTER_VALIDATE_URL)) {
-            throw new \InvalidArgumentException("Invalid avatar URL: {$url}");
+        if (! preg_match('/^https:\/\//', $url)) {
+            throw AvatarUrlNotValid::invalidProtocol($url);
         }
 
-        // Optional: Enforce HTTPS only
-        if (! preg_match('/^https:\/\//', $url)) {
-            throw new \InvalidArgumentException("Invalid avatar URL: {$url}. Must use HTTPS.");
+        if (! filter_var($url, FILTER_VALIDATE_URL)) {
+            throw AvatarUrlNotValid::invalidUrl($url);
         }
 
         return $url;
