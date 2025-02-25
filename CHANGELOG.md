@@ -2,6 +2,18 @@
 
 All notable changes to `laravel-discord-alerts` will be documented in this file.
 
+## 1.7.0 - 2025-02-25
+
+### What's Changed
+
+* Add support voor Laravel 12 and drop support for old Laravel versions by @dennisvandalen in https://github.com/spatie/laravel-discord-alerts/pull/54
+
+### New Contributors
+
+* @dennisvandalen made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/54
+
+**Full Changelog**: https://github.com/spatie/laravel-discord-alerts/compare/1.6.1...1.7.0
+
 ## 1.6.1 - 2025-02-06
 
 ### What's Changed
