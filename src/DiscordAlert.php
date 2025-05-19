@@ -94,6 +94,10 @@ class DiscordAlert
 
         $job = Config::getJob($jobArguments);
 
+        if ($queue = Config::getQueue()) {
+            $job->onQueue($queue);
+        }
+
         dispatch($job)->delay(now()->addMinutes($this->delay))->onConnection(Config::getConnection());
     }
 

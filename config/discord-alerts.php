@@ -21,4 +21,10 @@ return [
      * job to set timeouts, retries, etc...
      */
     'job' => Spatie\DiscordAlerts\Jobs\SendToDiscordChannelJob::class,
+
+    /*
+    * The queue name that should be used to send the alert. Only supported for drivers
+    * that allow multiple queues (e.g., redis, database, beanstalkd). Ignored for sync and null drivers.
+    */
+    'queue' => env('DISCORD_ALERT_QUEUE', 'default'),
 ];
