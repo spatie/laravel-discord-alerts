@@ -72,6 +72,12 @@ return [
      * It is possible to specify the queue connection that should be used to send the alert.
      */
     'queue_connection' => 'redis',
+    
+     /*
+     * The queue name that should be used to send the alert. Only supported for drivers
+     * that allow multiple queues (e.g., redis, database, beanstalkd). Ignored for sync and null drivers.
+     */
+     'queue' => env('DISCORD_ALERT_QUEUE', 'default'),
 ];
 
 ```

@@ -31,6 +31,27 @@ it('can dispatch a job to send a message to discord using the default webhook ur
     });
 });
 
+it('can dispatch a job to send a message to discord using the default webhook url and a custom queue name', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+    config()->set('discord-alerts.queue', 'custom-queue-name');
+
+    DiscordAlert::message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->queue === 'custom-queue-name';
+    });
+});
+
+it('can dispatch a job to send a message to discord using the default webhook url and the default queue name', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->queue === 'default';
+    });
+});
+
 it('can dispatch a job to send a message to discord using an alternative webhook url', function () {
     config()->set('discord-alerts.webhook_urls.marketing', 'https://test-domain.com');
 

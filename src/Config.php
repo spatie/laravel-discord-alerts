@@ -69,4 +69,15 @@ class Config
 
         return $connection;
     }
+
+    public static function getQueue(): ?string
+    {
+        $queueName = config("discord-alerts.queue");
+
+        if (! $queueName) {
+            return null;
+        }
+
+        return $queueName;
+    }
 }
