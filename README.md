@@ -46,6 +46,8 @@ php artisan vendor:publish --tag="discord-alerts-config"
 This is the contents of the published config file:
 
 ```php
+<?php
+
 return [
     /*
      * The webhook URLs that we'll use to send a message to Discord.
@@ -69,15 +71,10 @@ return [
     'job' => Spatie\DiscordAlerts\Jobs\SendToDiscordChannelJob::class,
 
     /*
-     * It is possible to specify the queue connection that should be used to send the alert.
-     */
-    'queue_connection' => 'redis',
-    
-     /*
-     * The queue name that should be used to send the alert. Only supported for drivers
-     * that allow multiple queues (e.g., redis, database, beanstalkd). Ignored for sync and null drivers.
-     */
-     'queue' => env('DISCORD_ALERT_QUEUE', 'default'),
+    * The queue name that should be used to send the alert. Only supported for drivers
+    * that allow multiple queues (e.g., redis, database, beanstalkd). Ignored for sync and null drivers.
+    */
+    'queue' => env('DISCORD_ALERT_QUEUE', 'default'),
 ];
 
 ```
