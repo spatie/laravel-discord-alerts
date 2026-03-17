@@ -59,6 +59,9 @@ class DiscordAlert
         return $this;
     }
 
+    /**
+     * @param array<int, array<string, mixed>> $embeds
+     */
     public function message(string $text, array $embeds = []): void
     {
         $webhookUrl = Config::getWebhookUrl($this->webhookUrlName);

@@ -21,6 +21,9 @@ class SendToDiscordChannelJob implements ShouldQueue
      */
     public int $maxExceptions = 3;
 
+    /**
+     * @param array<int, array<string, mixed>>|null $embeds
+     */
     public function __construct(
         public string $text,
         public string $webhookUrl,
