@@ -2,6 +2,26 @@
 
 All notable changes to `laravel-discord-alerts` will be documented in this file.
 
+## 1.9.0 - 2026-03-17
+
+### What's Changed
+
+* Update README.md config file example by @ziming in https://github.com/spatie/laravel-discord-alerts/pull/57
+* Update issue template by @AlexVanderbist in https://github.com/spatie/laravel-discord-alerts/pull/60
+* Bump dependabot/fetch-metadata from 2.4.0 to 2.5.0 by @dependabot[bot] in https://github.com/spatie/laravel-discord-alerts/pull/63
+* Bump actions/checkout from 4 to 6 by @dependabot[bot] in https://github.com/spatie/laravel-discord-alerts/pull/62
+* Bump stefanzweifel/git-auto-commit-action from 5 to 7 by @dependabot[bot] in https://github.com/spatie/laravel-discord-alerts/pull/61
+* Bump ramsey/composer-install from 3 to 4 by @dependabot[bot] in https://github.com/spatie/laravel-discord-alerts/pull/65
+* Laravel 13.x Compatibility by @the-pulli in https://github.com/spatie/laravel-discord-alerts/pull/66
+
+### New Contributors
+
+* @ziming made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/57
+* @AlexVanderbist made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/60
+* @the-pulli made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/66
+
+**Full Changelog**: https://github.com/spatie/laravel-discord-alerts/compare/1.8.0...1.9.0
+
 ## 1.8.0 - 2025-05-20
 
 ### What's Changed
