@@ -2,6 +2,20 @@
 
 All notable changes to `laravel-discord-alerts` will be documented in this file.
 
+## 1.9.1 - 2026-03-17
+
+### What's Changed
+
+* Document the queue connection config option by @freekmurze in https://github.com/spatie/laravel-discord-alerts/pull/67
+* Fix PHPStan config on main by @freekmurze in https://github.com/spatie/laravel-discord-alerts/pull/68
+* Add PHP 8.3 support by @the-pulli in https://github.com/spatie/laravel-discord-alerts/pull/69
+
+### New Contributors
+
+* @freekmurze made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/67
+
+**Full Changelog**: https://github.com/spatie/laravel-discord-alerts/compare/1.9.0...1.9.1
+
 ## 1.9.0 - 2026-03-17
 
 ### What's Changed
