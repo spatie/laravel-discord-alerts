@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Bus;
+use Illuminate\Support\Facades\Http;
 use Spatie\DiscordAlerts\Exceptions\AvatarUrlNotValid;
 use Spatie\DiscordAlerts\Exceptions\JobClassDoesNotExist;
 use Spatie\DiscordAlerts\Exceptions\UsernameNotValid;
@@ -238,4 +239,53 @@ it('includes tts when explicitly set to true', function () {
     Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
         return $job->tts === true;
     });
+});
+
+it('includes path based attachments when specified', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    $tempFilePath = tempnam(sys_get_temp_dir(), 'discord-alert-');
+    file_put_contents($tempFilePath, 'test-file-content');
+
+    DiscordAlert::attach($tempFilePath, 'report.txt')->message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) use ($tempFilePath) {
+        return count($job->attachments ?? []) === 1
+            && $job->attachments[0]['type'] === 'path'
+            && $job->attachments[0]['path'] === $tempFilePath
+            && $job->attachments[0]['name'] === 'report.txt';
+    });
+
+    unlink($tempFilePath);
+});
+
+it('sends multipart requests when attachments are present', function () {
+    Http::fake();
+
+    $tempFilePath = tempnam(sys_get_temp_dir(), 'discord-alert-');
+    file_put_contents($tempFilePath, 'test-file-content');
+
+    $job = new SendToDiscordChannelJob(
+        text: 'test-data',
+        webhookUrl: 'https://test-domain.com',
+        attachments: [[
+            'type' => 'path',
+            'path' => $tempFilePath,
+            'name' => 'report.txt',
+            'headers' => ['Content-Type' => 'text/plain'],
+        ]],
+    );
+
+    $job->handle();
+
+    Http::assertSent(function ($request) {
+        $body = $request->body();
+
+        return $request->url() === 'https://test-domain.com'
+            && str_contains($body, 'name="payload_json"')
+            && str_contains($body, '"content":"test-data"')
+            && str_contains($body, 'name="files[0]"; filename="report.txt"');
+    });
+
+    unlink($tempFilePath);
 });

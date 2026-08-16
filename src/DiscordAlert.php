@@ -11,6 +11,10 @@ class DiscordAlert
     protected ?string $username = null;
     protected bool $tts = false;
     protected ?string $avatarUrl = null;
+    /**
+     * @var array<int, array{type: string, name: string, path?: string, content?: string, headers: array<string, string>}>
+     */
+    protected array $attachments = [];
 
     public function to(string $webhookUrlName): self
     {
@@ -60,6 +64,36 @@ class DiscordAlert
     }
 
     /**
+     * @param array<string, string> $headers
+     */
+    public function attach(string $path, ?string $name = null, array $headers = []): self
+    {
+        $this->attachments[] = [
+            'type' => 'path',
+            'path' => $path,
+            'name' => $name ?? basename($path),
+            'headers' => $headers,
+        ];
+
+        return $this;
+    }
+
+    /**
+     * @param array<string, string> $headers
+     */
+    public function attachContent(string $content, string $name, array $headers = []): self
+    {
+        $this->attachments[] = [
+            'type' => 'content',
+            'content' => $content,
+            'name' => $name,
+            'headers' => $headers,
+        ];
+
+        return $this;
+    }
+
+    /**
      * @param array<int, array<string, mixed>> $embeds
      */
     public function message(string $text, array $embeds = []): void
@@ -84,6 +118,10 @@ class DiscordAlert
             'tts' => $this->tts,
             'embeds' => $embeds,
         ];
+
+        if (! empty($this->attachments)) {
+            $jobArguments['attachments'] = $this->attachments;
+        }
 
         if (! empty($this->username)) {
             $jobArguments['username'] = $this->username;

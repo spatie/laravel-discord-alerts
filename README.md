@@ -114,6 +114,28 @@ DiscordAlert::message("You have a new subscriber to the {$newsletter->name} news
 
 You can also send multiple embeds as one message. Just be careful that you don't hit the limit of Discord.
 
+## Sending attachments
+
+Discord webhooks support file uploads. You can attach files by path or by raw content.
+
+```php
+use Spatie\DiscordAlerts\Facades\DiscordAlert;
+
+DiscordAlert::attach(storage_path('app/reports/daily.csv'))->message('Daily report attached');
+
+DiscordAlert::attach(
+    storage_path('app/reports/summary.txt'),
+    'summary.txt',
+    ['Content-Type' => 'text/plain']
+)->message('Summary attached');
+
+DiscordAlert::attachContent(
+    json_encode(['ok' => true], JSON_PRETTY_PRINT),
+    'status.json',
+    ['Content-Type' => 'application/json']
+)->message('Inline status file attached');
+```
+
 ## Changing webhook username/avatar/tts
 
 Add/change the functions before invoking the message. `DiscordAlert::message()`
