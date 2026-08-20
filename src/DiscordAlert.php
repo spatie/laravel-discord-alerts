@@ -2,8 +2,8 @@
 
 namespace Spatie\DiscordAlerts;
 
-use SplFileInfo;
 use Spatie\DiscordAlerts\Exceptions\UsernameNotValid;
+use SplFileInfo;
 
 class DiscordAlert
 {

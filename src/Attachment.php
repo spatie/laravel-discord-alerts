@@ -2,8 +2,8 @@
 
 namespace Spatie\DiscordAlerts;
 
-use SplFileInfo;
 use Spatie\DiscordAlerts\Exceptions\AttachmentNotReadable;
+use SplFileInfo;
 
 class Attachment
 {
