@@ -2,6 +2,21 @@
 
 All notable changes to `laravel-discord-alerts` will be documented in this file.
 
+## 1.10.0 - 2026-08-20
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 2.5.0 to 3.0.0 by @dependabot[bot] in https://github.com/spatie/laravel-discord-alerts/pull/70
+* Bump dependabot/fetch-metadata from 3.0.0 to 3.1.0 by @dependabot[bot] in https://github.com/spatie/laravel-discord-alerts/pull/71
+* Bump actions/checkout from 6 to 7 by @dependabot[bot] in https://github.com/spatie/laravel-discord-alerts/pull/72
+* add attachment functionality by @pschilly in https://github.com/spatie/laravel-discord-alerts/pull/73
+
+### New Contributors
+
+* @pschilly made their first contribution in https://github.com/spatie/laravel-discord-alerts/pull/73
+
+**Full Changelog**: https://github.com/spatie/laravel-discord-alerts/compare/1.9.1...1.10.0
+
 ## 1.9.1 - 2026-03-17
 
 ### What's Changed
