@@ -2,6 +2,7 @@
 
 namespace Spatie\DiscordAlerts;
 
+use SplFileInfo;
 use Spatie\DiscordAlerts\Exceptions\UsernameNotValid;
 
 class DiscordAlert
@@ -11,9 +12,8 @@ class DiscordAlert
     protected ?string $username = null;
     protected bool $tts = false;
     protected ?string $avatarUrl = null;
-    /**
-     * @var array<int, array{type: string, name: string, path?: string, content?: string, headers: array<string, string>}>
-     */
+
+    /** @var array<int, Attachment> */
     protected array $attachments = [];
 
     public function to(string $webhookUrlName): self
@@ -63,32 +63,16 @@ class DiscordAlert
         return $this;
     }
 
-    /**
-     * @param array<string, string> $headers
-     */
-    public function attach(string $path, ?string $name = null, array $headers = []): self
+    public function attach(string|SplFileInfo $file, ?string $name = null, ?string $mimeType = null): self
     {
-        $this->attachments[] = [
-            'type' => 'path',
-            'path' => $path,
-            'name' => $name ?? basename($path),
-            'headers' => $headers,
-        ];
+        $this->attachments[] = Attachment::fromPath($file, $name, $mimeType);
 
         return $this;
     }
 
-    /**
-     * @param array<string, string> $headers
-     */
-    public function attachContent(string $content, string $name, array $headers = []): self
+    public function attachData(string $content, string $name, ?string $mimeType = null): self
     {
-        $this->attachments[] = [
-            'type' => 'content',
-            'content' => $content,
-            'name' => $name,
-            'headers' => $headers,
-        ];
+        $this->attachments[] = Attachment::fromData($content, $name, $mimeType);
 
         return $this;
     }
@@ -138,6 +122,8 @@ class DiscordAlert
         if ($queue = Config::getQueue()) {
             $job->onQueue($queue);
         }
+
+        $this->attachments = [];
 
         dispatch($job)->delay(now()->addMinutes($this->delay))->onConnection(Config::getConnection());
     }

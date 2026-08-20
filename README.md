@@ -116,25 +116,33 @@ You can also send multiple embeds as one message. Just be careful that you don't
 
 ## Sending attachments
 
-Discord webhooks support file uploads. You can attach files by path or by raw content.
+You can attach one or more files to a message. `attach()` takes a path or an `SplFileInfo` instance, and uses the file name of the given file unless you pass one yourself.
 
 ```php
-use Spatie\DiscordAlerts\Facades\DiscordAlert;
-
 DiscordAlert::attach(storage_path('app/reports/daily.csv'))->message('Daily report attached');
 
-DiscordAlert::attach(
-    storage_path('app/reports/summary.txt'),
-    'summary.txt',
-    ['Content-Type' => 'text/plain']
-)->message('Summary attached');
-
-DiscordAlert::attachContent(
-    json_encode(['ok' => true], JSON_PRETTY_PRINT),
-    'status.json',
-    ['Content-Type' => 'application/json']
-)->message('Inline status file attached');
+DiscordAlert::attach(storage_path('app/reports/2024-05.csv'), 'last-month.csv')
+    ->attach(storage_path('app/reports/2024-06.csv'), 'this-month.csv')
+    ->message('Both reports attached');
 ```
+
+To attach something you generated on the fly, use `attachData()`.
+
+```php
+$csv = $subscribers->toCsv();
+
+DiscordAlert::attachData($csv, 'subscribers.csv')->message('Subscribers of this month');
+```
+
+The content type is derived from the file name. If that guess is wrong, pass one as the last argument.
+
+```php
+DiscordAlert::attachData($csv, 'subscribers.txt', 'text/csv')->message('Subscribers of this month');
+```
+
+Files attached with `attach()` are read when the queued job runs, so make sure the file still exists at that point. If you attach a temporary file, or if your queue workers run on another machine, use `attachData()` instead.
+
+Keep Discord's limits in mind: at most 10 files per message, and 8MB in total on servers without a boost.
 
 ## Changing webhook username/avatar/tts
 

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
+use Spatie\DiscordAlerts\Attachment;
+use Spatie\DiscordAlerts\Exceptions\AttachmentNotReadable;
 use Spatie\DiscordAlerts\Exceptions\AvatarUrlNotValid;
 use Spatie\DiscordAlerts\Exceptions\JobClassDoesNotExist;
 use Spatie\DiscordAlerts\Exceptions\UsernameNotValid;
@@ -241,42 +243,83 @@ it('includes tts when explicitly set to true', function () {
     });
 });
 
-it('includes path based attachments when specified', function () {
+it('can attach a file from a path', function () {
     config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
 
-    $tempFilePath = tempnam(sys_get_temp_dir(), 'discord-alert-');
-    file_put_contents($tempFilePath, 'test-file-content');
+    DiscordAlert::attach(fixturePath())->message('test-data');
 
-    DiscordAlert::attach($tempFilePath, 'report.txt')->message('test-data');
-
-    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) use ($tempFilePath) {
-        return count($job->attachments ?? []) === 1
-            && $job->attachments[0]['type'] === 'path'
-            && $job->attachments[0]['path'] === $tempFilePath
-            && $job->attachments[0]['name'] === 'report.txt';
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return count($job->attachments) === 1
+            && $job->attachments[0]->path === fixturePath()
+            && $job->attachments[0]->name === 'report.txt';
     });
-
-    unlink($tempFilePath);
 });
 
-it('sends multipart requests when attachments are present', function () {
+it('can attach a file using an SplFileInfo instance', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::attach(new SplFileInfo(fixturePath()), 'renamed.txt')->message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->attachments[0]->name === 'renamed.txt';
+    });
+});
+
+it('can attach raw data', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::attachData('{"ok":true}', 'status.json')->message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->attachments[0]->content === '{"ok":true}'
+            && $job->attachments[0]->name === 'status.json';
+    });
+});
+
+it('throws when attaching a file that cannot be read', function () {
+    DiscordAlert::attach('/this/file/does/not/exist.txt');
+})->throws(AttachmentNotReadable::class);
+
+it('strips characters that would break the multipart body from the attachment name', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::attachData('data', "evil\"\r\nX-Injected: yes")->message('test-data');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->attachments[0]->name === 'evilX-Injected: yes';
+    });
+});
+
+it('does not carry attachments over to the next message', function () {
+    config()->set('discord-alerts.webhook_urls.default', 'https://test-domain.com');
+
+    DiscordAlert::attach(fixturePath())->message('first');
+    DiscordAlert::message('second');
+
+    Bus::assertDispatched(SendToDiscordChannelJob::class, function ($job) {
+        return $job->text === 'second' && empty($job->attachments);
+    });
+});
+
+it('sends a plain json request when there are no attachments', function () {
     Http::fake();
 
-    $tempFilePath = tempnam(sys_get_temp_dir(), 'discord-alert-');
-    file_put_contents($tempFilePath, 'test-file-content');
+    (new SendToDiscordChannelJob(text: 'test-data', webhookUrl: 'https://test-domain.com'))->handle();
 
-    $job = new SendToDiscordChannelJob(
+    Http::assertSent(function ($request) {
+        return $request->hasHeader('Content-Type', 'application/json')
+            && $request['content'] === 'test-data';
+    });
+});
+
+it('sends a multipart request when there are attachments', function () {
+    Http::fake();
+
+    (new SendToDiscordChannelJob(
         text: 'test-data',
         webhookUrl: 'https://test-domain.com',
-        attachments: [[
-            'type' => 'path',
-            'path' => $tempFilePath,
-            'name' => 'report.txt',
-            'headers' => ['Content-Type' => 'text/plain'],
-        ]],
-    );
-
-    $job->handle();
+        attachments: [Attachment::fromPath(fixturePath())],
+    ))->handle();
 
     Http::assertSent(function ($request) {
         $body = $request->body();
@@ -284,8 +327,43 @@ it('sends multipart requests when attachments are present', function () {
         return $request->url() === 'https://test-domain.com'
             && str_contains($body, 'name="payload_json"')
             && str_contains($body, '"content":"test-data"')
-            && str_contains($body, 'name="files[0]"; filename="report.txt"');
+            && str_contains($body, 'name="files[0]"; filename="report.txt"')
+            && str_contains($body, 'Content-Type: text/plain')
+            && str_contains($body, 'test-file-content');
     });
-
-    unlink($tempFilePath);
 });
+
+it('numbers every attachment of a multipart request', function () {
+    Http::fake();
+
+    (new SendToDiscordChannelJob(
+        text: 'test-data',
+        webhookUrl: 'https://test-domain.com',
+        attachments: [
+            Attachment::fromPath(fixturePath()),
+            Attachment::fromData('{"ok":true}', 'status.json', 'application/json'),
+        ],
+    ))->handle();
+
+    Http::assertSent(function ($request) {
+        $body = $request->body();
+
+        return str_contains($body, 'name="files[0]"; filename="report.txt"')
+            && str_contains($body, 'name="files[1]"; filename="status.json"')
+            && str_contains($body, 'Content-Type: application/json');
+    });
+});
+
+it('throws when a path based attachment disappears before the job runs', function () {
+    Http::fake();
+
+    $path = tempnam(sys_get_temp_dir(), 'discord-alert-');
+    $attachment = Attachment::fromPath($path, 'report.txt');
+    unlink($path);
+
+    (new SendToDiscordChannelJob(
+        text: 'test-data',
+        webhookUrl: 'https://test-domain.com',
+        attachments: [$attachment],
+    ))->handle();
+})->throws(AttachmentNotReadable::class);
