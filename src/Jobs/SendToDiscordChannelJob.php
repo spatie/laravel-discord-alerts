@@ -8,6 +8,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Http;
+use Spatie\DiscordAlerts\Attachment;
 
 class SendToDiscordChannelJob implements ShouldQueue
 {
@@ -23,6 +24,7 @@ class SendToDiscordChannelJob implements ShouldQueue
 
     /**
      * @param array<int, array<string, mixed>>|null $embeds
+     * @param array<int, Attachment>|null $attachments
      */
     public function __construct(
         public string $text,
@@ -30,7 +32,8 @@ class SendToDiscordChannelJob implements ShouldQueue
         public ?string $username = null,
         public bool $tts = false,
         public ?string $avatar_url = null,
-        public array|null $embeds = null
+        public ?array $embeds = null,
+        public ?array $attachments = null,
     ) {
     }
 
@@ -53,6 +56,20 @@ class SendToDiscordChannelJob implements ShouldQueue
             $payload['embeds'] = $this->embeds;
         }
 
-        Http::post($this->webhookUrl, $payload);
+        if (empty($this->attachments)) {
+            Http::post($this->webhookUrl, $payload);
+
+            return;
+        }
+
+        $request = Http::asMultipart();
+
+        foreach (array_values($this->attachments) as $index => $attachment) {
+            $request->attach("files[{$index}]", $attachment->contents(), $attachment->name, $attachment->headers());
+        }
+
+        $request->post($this->webhookUrl, [
+            'payload_json' => json_encode($payload, JSON_THROW_ON_ERROR),
+        ]);
     }
 }

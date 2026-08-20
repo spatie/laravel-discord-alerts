@@ -2,6 +2,7 @@
 
 namespace Spatie\DiscordAlerts;
 
+use SplFileInfo;
 use Spatie\DiscordAlerts\Exceptions\UsernameNotValid;
 
 class DiscordAlert
@@ -11,6 +12,9 @@ class DiscordAlert
     protected ?string $username = null;
     protected bool $tts = false;
     protected ?string $avatarUrl = null;
+
+    /** @var array<int, Attachment> */
+    protected array $attachments = [];
 
     public function to(string $webhookUrlName): self
     {
@@ -59,6 +63,20 @@ class DiscordAlert
         return $this;
     }
 
+    public function attach(string|SplFileInfo $file, ?string $name = null, ?string $mimeType = null): self
+    {
+        $this->attachments[] = Attachment::fromPath($file, $name, $mimeType);
+
+        return $this;
+    }
+
+    public function attachData(string $content, string $name, ?string $mimeType = null): self
+    {
+        $this->attachments[] = Attachment::fromData($content, $name, $mimeType);
+
+        return $this;
+    }
+
     /**
      * @param array<int, array<string, mixed>> $embeds
      */
@@ -85,6 +103,10 @@ class DiscordAlert
             'embeds' => $embeds,
         ];
 
+        if (! empty($this->attachments)) {
+            $jobArguments['attachments'] = $this->attachments;
+        }
+
         if (! empty($this->username)) {
             $jobArguments['username'] = $this->username;
         }
@@ -100,6 +122,8 @@ class DiscordAlert
         if ($queue = Config::getQueue()) {
             $job->onQueue($queue);
         }
+
+        $this->attachments = [];
 
         dispatch($job)->delay(now()->addMinutes($this->delay))->onConnection(Config::getConnection());
     }
